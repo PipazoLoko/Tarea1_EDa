@@ -44,7 +44,7 @@ int main() {
 
 
     delete[] img-> data;
-    dalete img;
+
 
     return 0;
 
