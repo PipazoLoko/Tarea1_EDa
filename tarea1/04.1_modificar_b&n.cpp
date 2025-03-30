@@ -1,7 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-// Importacion de librerias. Los archivos correspondientes deben estar en el mismo directorio que el .cpp.
+// importacion de librerias. Los archivos correspondientes deben estar en el mismo directorio que el .cpp.
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include <iostream>
@@ -14,33 +14,33 @@ struct Imagen{
     int width, height, channels;
 };
 
-// Abrir imagen desde memoria local
+// abrimos la imagen desde la memoria local
 Imagen* load(const char* filename) {
     Imagen* img = new Imagen();
     img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 0);
     return img;
 }
 
-// Guardar imagen en memoria local
+// guardardamos la imagen en la memoria local
 void save(Imagen* img, const char* filename) {
     stbi_write_png(filename, img->width, img->height, img->channels, img->data, img->width * img->channels);
     cout << "Imagen guardada:  " << filename << "\n";
 }
 
-// Función para umbralizar la imagen (blanco/negro basado en límite)
+// funcion para mdificar la imagen (blanco/negro)
 void umbralizar(Imagen* imagen, int limite) {
-    // Validar parámetros
+    // validamos parámetros
     if (imagen == nullptr || imagen->data == nullptr) {
         std::cerr << "Error: Imagen no válida para umbralizar." << std::endl;
         return;
     }
 
-    // Asegurar que el límite esté en [0, 255]
+    // aseguramos el límite [0, 255]
     limite = std::max(0, std::min(255, limite));
 
-    // Procesar cada píxel
+    // procesamos cada píxel
     for (int i = 0; i < imagen->width * imagen->height; ++i) {
-        // Calcular posición base del píxel
+        // calcular la posición base del píxel
         int indice_base = i * imagen->channels;
 
         // Convertir a escala de grises si es necesario
