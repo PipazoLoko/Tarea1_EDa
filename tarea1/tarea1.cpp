@@ -72,13 +72,14 @@ int main(){
     img->data[106] = 0;
 
     // Rotar la imagen 90 grados
-    Imagen *img = rotate90(img);
+    Imagen *img2 = rotate90(img);
 
-            // Almacenamos el resultado
-            save(img, "Pikachu_output.png");
-
-        delete[] img->data;
-        delete img;
+    // Almacenamos el resultado
+    save(img2, "Pikachu_output.png");
+    delete[] img->data;
+    delete img;
+    delete[] img2->data; // Libera los datos de la imagen rotada
+    delete img2;
 
 return 0;
 }
