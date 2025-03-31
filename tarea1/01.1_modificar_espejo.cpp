@@ -17,7 +17,7 @@ struct Imagen{
 // Abrir imagen desde memoria local
 Imagen* load(const char* filename) {
     Imagen* img = new Imagen();
-    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 0);
+    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 2);
     return img;
 }
 
@@ -71,12 +71,6 @@ int main() {
     // Cargar imagen
     Imagen* pikachu = load("Pikachu2.png");
     
-    // Validar carga
-    if (pikachu->data == nullptr) {
-        std::cerr << "Error al cargar la imagen." << std::endl;
-        return 1;
-    }
-
     // Aplicar efecto espejo horizontal
     espejo_horizontal(pikachu);
 
