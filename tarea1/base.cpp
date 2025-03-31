@@ -17,13 +17,13 @@ struct Imagen{
 // Abrir imagen desde memoria local
 Imagen* load(const char* filename) {
     Imagen* img = new Imagen();
-    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 1);
+    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 0);
     return img;
 }
 
 // Guardar imagen en memoria local
 void save(Imagen* img, const char* filename) {
-    stbi_write_png(filename, img->width, img->height, 1, img->data, img->width * 1);
+    stbi_write_png(filename, img->width, img->height, img->channels, img->data, img->width * img->channels);
     cout << "Imagen guardada:  " << filename << "\n";
 }
 
@@ -32,12 +32,12 @@ int main() {
     Imagen* img = load("Pikachu.png");
 
     //Modificamos un par de pixeles en el borde superior de la imagen como ejemplo
-    // img->data[101] = 0;
-    // img->data[102] = 0;
-    // img->data[103] = 0;
-    // img->data[104] = 0;
-    // img->data[105] = 0;
-    // img->data[106] = 0;
+    img->data[101] = 0;
+    img->data[102] = 0;
+    img->data[103] = 0;
+    img->data[104] = 0;
+    img->data[105] = 0;
+    img->data[106] = 0;
 
     // Almacenamos el resultado
     save(img, "output.png");

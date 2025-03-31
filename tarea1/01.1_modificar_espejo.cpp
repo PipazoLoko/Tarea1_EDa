@@ -17,7 +17,7 @@ struct Imagen{
 // Abrir imagen desde memoria local
 Imagen* load(const char* filename) {
     Imagen* img = new Imagen();
-    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 2);
+    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 0);
     return img;
 }
 
