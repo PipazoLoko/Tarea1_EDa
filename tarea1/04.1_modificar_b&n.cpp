@@ -33,6 +33,7 @@ void operacion4(Imagen* imagen, int limite) {
     if (limite < 0) limite = 0;
     else if (limite > 255) limite = 255;
 
+
     // procesamos cada píxel
     for (int i = 0; i < imagen->width * imagen->height; ++i) {
         // calcular la posición base del píxel
@@ -62,12 +63,9 @@ void operacion4(Imagen* imagen, int limite) {
             imagen->data[indice_base + c] = nuevo_valor;
         }
 
-        // Mantener canal alpha sin cambios si existe
-        //if (imagen->channels == 4) {
-           // imagen->data[indice_base + 3] = imagen->data[indice_base + 3];
         }
     }
-//}
+
 
 int main() {
     // Cargar imagen
