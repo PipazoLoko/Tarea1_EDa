@@ -21,27 +21,23 @@ Imagen* load(const char* filename) {
     return img;
 }
 
-// Función para rotar 90 grados a la derecha
-Imagen* rotar90Derecha(Imagen* original) {
-    // Crear nueva imagen con dimensiones invertidas
+Imagen* rotar(Imagen* original) {
+    //invertido
     Imagen* rotada = new Imagen();
-    rotada->width = original->height;   // El alto original será el nuevo ancho
-    rotada->height = original->width;   // El ancho original será el nuevo alto
+    rotada->width = original->height;//alto sera ancho
+    rotada->height = original->width;//ancho sera alto
     rotada->channels = original->channels;
     
-    // Asignar memoria para los datos rotados
+    //asignamos memoria
     rotada->data = new unsigned char[rotada->width * rotada->height * rotada->channels];
 
-    // Algoritmo de rotación
-    for (int y = 0; y < original->height; ++y) {
-        for (int x = 0; x < original->width; ++x) {
-            // Calcular índices
-            int indice_original = (y * original->width + x) * original->channels;
-            int indice_rotado = (x * rotada->width + (rotada->width - 1 - y)) * rotada->channels;
-            
-            // Copiar todos los canales
+    for (int h = 0; h < original->height; ++h) { 
+        for (int w = 0; w < original->width; ++w) {
+            int indice_original = (h* original->width +w) * original->channels; //calculamos indices
+            int indice_rotado = (w* rotada->width + (rotada->width -1 -h)) * rotada->channels;//calculamos indices rot
+        
             for (int c = 0; c < original->channels; ++c) {
-                rotada->data[indice_rotado + c] = original->data[indice_original + c];
+                rotada->data[indice_rotado + c] = original->data[indice_original + c];//copiamos canales
             }
         }
     }
@@ -56,22 +52,12 @@ void save(Imagen* img, const char* filename) {
 }
 
 int main() {
-    // Cargar imagen
+    //cargamos imagen
     Imagen* pikachu = load("Pikachu3.png");
-    
-    // Validar carga
-    if (pikachu->data == nullptr) {
-        std::cerr << "Error al cargar la imagen." << std::endl;
-        return 1;
-    }
+    Imagen* rotada = rotar(pikachu);//rotamos
+    save(rotada, "Pikachu3.png");//guardamos
 
-    // Rotar 90° a la derecha
-    Imagen* rotada = rotar90Derecha(pikachu);
-
-    // Guardar resultado
-    save(rotada, "Pikachu3.png");
-
-    // Liberar recursos
+    //liberamos memoria
     delete[] pikachu->data;
     delete pikachu;
     delete[] rotada->data;
@@ -79,3 +65,6 @@ int main() {
 
     return 0;
 }
+
+
+
