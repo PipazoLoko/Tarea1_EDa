@@ -28,7 +28,7 @@ void save(Imagen* img, const char* filename) {
 }
 
 //función para atenuar
-void atenuar(Imagen* imagen, float factor) {
+void operacion3(Imagen* imagen, float factor) {
   if (factor < 0.0f) factor = 0.0f; //rango [0, 1]
   if (factor > 1.0f) factor = 1.0f;
   for (int indice = 0; indice < imagen->width * imagen->height * imagen->channels; ++indice) {
@@ -41,7 +41,7 @@ int main() {
   // cargamos la imagen
   Imagen* pikachu = load("Pikachu4.png");
 
-  atenuar(pikachu, 0.5f);// atenuamos la mitad
+  operacion3(pikachu, 0.5f);// atenuamos la mitad
   save(pikachu, "Pikachu4.png");
   delete[] pikachu->data;// liberamos memoria
   delete pikachu;

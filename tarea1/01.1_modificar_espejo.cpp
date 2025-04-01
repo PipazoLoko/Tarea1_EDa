@@ -26,7 +26,7 @@ Con 4 canales, es decir, 4 componentes por cada pixel, siendo el ultimo canal
 Alpha o canal de transparencia.*/
 
 // Funcion para invertir horizontalmente
-void espejo_horizontal(Imagen* imagen) {
+void operacion1(Imagen* imagen) {
     // Memoria temporal de los pixeles mientras se hace el intercambio
     unsigned char* memoria_temporal = new unsigned char[imagen->channels];
     // Iterar sobre cada fila de la imagen
@@ -70,7 +70,7 @@ void save(Imagen* img, const char* filename) {
 int main() {
     // Cargar imagen
     Imagen* pikachu = load("Pikachu2.png");
-    espejo_horizontal(pikachu);//aplicar efecto espejo
+    operacion1(pikachu);//aplicar efecto espejo
     save(pikachu, "Pikachu2.png");
     delete[] pikachu->data;//liberamos memoria
     delete pikachu;

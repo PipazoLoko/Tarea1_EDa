@@ -28,7 +28,7 @@ void save(Imagen* img, const char* filename) {
 }
 
 // funcion para mdificar la imagen (blanco/negro)
-void umbralizar(Imagen* imagen, int limite) {
+void operacion4(Imagen* imagen, int limite) {
     // aseguramos el límite [0, 255]
     if (limite < 0) limite = 0;
     else if (limite > 255) limite = 255;
@@ -75,7 +75,7 @@ int main() {
 
     // Umbralizar con límite de 128 (puedes cambiar este valor)
     int limite_umbral = 100;
-    umbralizar(img, limite_umbral);
+    operacion4(img, limite_umbral);
 
     // Guardar resultado
     save(img, "Pikachu5.png");

@@ -21,7 +21,7 @@ Imagen* load(const char* filename) {
     return img;
 }
 
-Imagen* rotar(Imagen* original) {
+Imagen* operacion2(Imagen* original) {
     //invertido
     Imagen* rotada = new Imagen();
     rotada->width = original->height;//alto sera ancho
@@ -54,7 +54,7 @@ void save(Imagen* img, const char* filename) {
 int main() {
     //cargamos imagen
     Imagen* pikachu = load("Pikachu3.png");
-    Imagen* rotada = rotar(pikachu);//rotamos
+    Imagen* rotada = operacion2(pikachu);//rotamos
     save(rotada, "Pikachu3.png");//guardamos
 
     //liberamos memoria
