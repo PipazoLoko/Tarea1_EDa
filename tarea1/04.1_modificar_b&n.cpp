@@ -29,14 +29,9 @@ void save(Imagen* img, const char* filename) {
 
 // funcion para mdificar la imagen (blanco/negro)
 void umbralizar(Imagen* imagen, int limite) {
-    // validamos parámetros
-    if (imagen == nullptr || imagen->data == nullptr) {
-        std::cerr << "Error: Imagen no válida para umbralizar." << std::endl;
-        return;
-    }
-
     // aseguramos el límite [0, 255]
-    limite = std::max(0, std::min(255, limite));
+    if (limite < 0) limite = 0;
+    else if (limite > 255) limite = 255;
 
     // procesamos cada píxel
     for (int i = 0; i < imagen->width * imagen->height; ++i) {
@@ -45,7 +40,7 @@ void umbralizar(Imagen* imagen, int limite) {
 
         // Convertir a escala de grises si es necesario
         float valor_gris;
-        if (imagen->channels >= 3) {  // RGB o RGBA
+        if (imagen->channels >= 3) {  // RGB
             valor_gris = 0.299f * imagen->data[indice_base] +   // R
                          0.587f * imagen->data[indice_base + 1] + // G
                          0.114f * imagen->data[indice_base + 2];  // B
@@ -54,19 +49,25 @@ void umbralizar(Imagen* imagen, int limite) {
         }
 
         // Determinar nuevo valor (blanco o negro)
-        unsigned char nuevo_valor = (valor_gris > limite) ? 255 : 0;
+        unsigned char nuevo_valor; 
+
+        if (valor_gris > limite) {
+            nuevo_valor = 255;
+        } else {
+            nuevo_valor = 0;   
+        }
 
         // Aplicar a todos los canales de color (excepto alpha si existe)
-        for (int c = 0; c < std::min(3, imagen->channels); ++c) {
+        for (int c = 0; c < min(3, imagen->channels); ++c) {
             imagen->data[indice_base + c] = nuevo_valor;
         }
 
         // Mantener canal alpha sin cambios si existe
-        if (imagen->channels == 4) {
-            imagen->data[indice_base + 3] = imagen->data[indice_base + 3];
+        //if (imagen->channels == 4) {
+           // imagen->data[indice_base + 3] = imagen->data[indice_base + 3];
         }
     }
-}
+//}
 
 int main() {
     // Cargar imagen
