@@ -26,15 +26,15 @@ Imagen* rotar(Imagen* original) {
     Imagen* rotada = new Imagen();
     rotada->width = original->height;//alto sera ancho
     rotada->height = original->width;//ancho sera alto
-    rotada->channels = original->channels;
+    rotada->channels = original->channels;//mantendremos los canales
     
     //asignamos memoria
     rotada->data = new unsigned char[rotada->width * rotada->height * rotada->channels];
 
-    for (int h = 0; h < original->height; ++h) { 
-        for (int w = 0; w < original->width; ++w) {
-            int pos_original = (h* original->width +w) * original->channels; //calculamos indices
-            int pos_rotada = (w* rotada->width + (rotada->width -1 -h)) * rotada->channels;//calculamos indices rot
+    for (int h = 0; h < original->height; ++h) { //recorremos cada fila hasta llegar a la altura
+        for (int w = 0; w < original->width; ++w) {//recorremos cada columna hasta llegar al ancho
+            int pos_original = (h* original->width +w) * original->channels; //calculamos los indices exactos
+            int pos_rotada = (w* rotada->width + (rotada->width -1 -h)) * rotada->channels;//calculamos indices ya rotados
         
             for (int c = 0; c < original->channels; ++c) {
                 rotada->data[pos_rotada + c] = original->data[pos_original + c];//copiamos canales

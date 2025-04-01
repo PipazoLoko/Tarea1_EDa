@@ -70,15 +70,9 @@ void save(Imagen* img, const char* filename) {
 int main() {
     // Cargar imagen
     Imagen* pikachu = load("Pikachu2.png");
-    
-    // Aplicar efecto espejo horizontal
-    espejo_horizontal(pikachu);
-
-    // Guardar resultado
+    espejo_horizontal(pikachu);//aplicar efecto espejo
     save(pikachu, "Pikachu2.png");
-
-    // Liberar recursos
-    delete[] pikachu->data;
+    delete[] pikachu->data;//liberamos memoria
     delete pikachu;
 
     return 0;
