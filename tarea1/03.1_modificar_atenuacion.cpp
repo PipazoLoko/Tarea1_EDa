@@ -27,18 +27,13 @@ void save(Imagen* img, const char* filename) {
     cout << "Imagen guardada:  " << filename << "\n";
 }
 
-// función para atenuar los valores de los píxeles
-void atenuarImagen(Imagen* imagen, float factor) {
-
-  //aseguramos rango [0, 1]
-  if (factor < 0.0f) factor = 0.0f;
+//función para atenuar
+void atenuar(Imagen* imagen, float factor) {
+  if (factor < 0.0f) factor = 0.0f; //rango [0, 1]
   if (factor > 1.0f) factor = 1.0f;
-
-  // iteramos sobre todos los píxeles de la imagen
   for (int indice = 0; indice < imagen->width * imagen->height * imagen->channels; ++indice) {
-      // aplicamos la atenuación 
-      float valor_atenuado = imagen->data[indice] * factor;
-      imagen->data[indice] = static_cast<unsigned char>(valor_atenuado + 0.5f); // +0.5 para redondeo
+      float v_atenuado = imagen->data[indice] * factor;//atenuamos
+      imagen->data[indice] = static_cast<unsigned char>(v_atenuado);//+ 0.5f) // +0.5 para redondeo
   }
 }
 
@@ -46,14 +41,9 @@ int main() {
   // cargamos la imagen
   Imagen* pikachu = load("Pikachu4.png");
 
-  // atenuamos al 50%
-  atenuarImagen(pikachu, 0.5f);
-
-  // guardamos el resultado
+  atenuar(pikachu, 0.5f);// atenuamos la mitad
   save(pikachu, "Pikachu4.png");
-
-  // liberamos memoria
-  delete[] pikachu->data;
+  delete[] pikachu->data;// liberamos memoria
   delete pikachu;
 
   return 0;

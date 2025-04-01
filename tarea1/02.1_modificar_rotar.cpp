@@ -33,11 +33,11 @@ Imagen* rotar(Imagen* original) {
 
     for (int h = 0; h < original->height; ++h) { 
         for (int w = 0; w < original->width; ++w) {
-            int indice_original = (h* original->width +w) * original->channels; //calculamos indices
-            int indice_rotado = (w* rotada->width + (rotada->width -1 -h)) * rotada->channels;//calculamos indices rot
+            int pos_original = (h* original->width +w) * original->channels; //calculamos indices
+            int pos_rotada = (w* rotada->width + (rotada->width -1 -h)) * rotada->channels;//calculamos indices rot
         
             for (int c = 0; c < original->channels; ++c) {
-                rotada->data[indice_rotado + c] = original->data[indice_original + c];//copiamos canales
+                rotada->data[pos_rotada + c] = original->data[pos_original + c];//copiamos canales
             }
         }
     }
