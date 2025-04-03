@@ -17,13 +17,13 @@ struct Imagen{
 // Abrir imagen desde memoria local
 Imagen* load(const char* filename) {
     Imagen* img = new Imagen();
-    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 1);
+    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 3);
     return img;
 }
 
 // Guardar imagen en memoria local
 void save(Imagen* img, const char* filename) {
-    stbi_write_png(filename, img->width, img->height, 1, img->data, img->width * 1);
+    stbi_write_png(filename, img->width, img->height, 3, img->data, img->width * 3);
     cout << "Imagen guardada:  " << filename << "\n";
 }
 

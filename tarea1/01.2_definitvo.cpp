@@ -24,10 +24,12 @@ Imagen* load(const char* filename) {
 //funcion para invertir horizontalmente la imagen
 void invertir(Imagen* imagen){
   int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 4 256 256 
+  cout<<canales<<endl;
   unsigned char* array_pixeles = imagen->data; // Pixeles por canales en un array (puntero hacia un array)
   for (int fila = 0; fila < alto ;++fila){ //itera por filas
     for (int clmIzq = 0; clmIzq < (ancho / 2) ; ++clmIzq){ //itera columnas de la mitad izquierda
       int clmDer = ancho - 1 - clmIzq, indIzq = (ancho * fila + clmIzq) * canales , indDer = (ancho * fila + clmDer) * canales; // calcula columna derecha asociada a la izquierda; "cordenadas" de los pixeles para ser utilizada en el array que almacena los canales de los pixeles
+      //swap de canales por pixel
       for(int i = 0; i < canales; ++i){
         unsigned char temp = array_pixeles[indIzq + i];  //almacena temporalmente los valores de los canales del pixel izquierdo
         array_pixeles[indIzq + i] = array_pixeles[indDer + i ]; //asigna valores de canales del pixel derecho al izq
@@ -48,6 +50,6 @@ int main() {
     Imagen* img = load("Pikachu2.png");
     invertir(img);
     save(img, "Pikachu2.png");// Almacenamos el resultado
-    stbi_image_free(img->data); // función de la librería stb_image.h que libera memoria de la funcion stbi_load. el ultimo carga, el primero libera
+    stbi_image_free(img->data); // función de la librería stb_image.h que libera memoria de la funcion stbi_load. 
     delete img; //elimina el objeto, la estructura o el "esqueleto", mientras que la anterior deletea su contenido fuente: https://solarianprogrammer.com/2019/06/10/c-programming-reading-writing-images-stb_image-libraries/
 }

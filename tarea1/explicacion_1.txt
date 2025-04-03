@@ -1,0 +1,17 @@
+Logica de la funcion invertir:
+
+(0) creo un array temporal de tamaño dinamico para almacenar canales (RGB) por pixel = unsigned char* memoria_temporal = new unsigned char[imagen->channels]
+(1) iterar por cantidad de pixeles de alto = interar por cantidad de filas
+  (2) iterar por cantidad de pixeles de ancho/2 = iterar por columnas hasta la mitad
+    (2.1) calculo columna derecha asociada a la columna izquierda = ancho - 1 - columna izq
+    (2.2) calculo del indice del canal R del pixel izquierdo = fila i * ancho + colum izq (x,y coordenadas fila columna)
+    (2.3) calculo del indice del canal R del pixel derecho = fila i * ancho + col derecha
+    (3) iterar por cantidad de canales (swap o intercambio)
+      (3.1) almacena los "R | G | B" del pixel izquierdo en los componentes del array temporalmente
+      (3.2) copia los "R | G | B" del pixel derecho al izquierdo
+      (3.3) asigna los "R | G | B" del pixel izquierdo al derecho 
+(4) libera la memoria
+
+obs:
+-(2.1)(2.2)(2.3) se puede resumir en un una sola linea
+-(0)(4) creo que es opcional. lo elimino 
