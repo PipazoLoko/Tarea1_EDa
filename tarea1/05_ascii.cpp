@@ -95,7 +95,7 @@ int main() {
     }
     
     // Guardar el ASCII Art en un archivo de texto
-    save_ascii(ascii_art, img->height, "output.txt");
+    save_ascii(ascii_art, img->height, "Pikachuassci.txt");
     
     // Liberar la memoria reservada para el arreglo bidimensional
     for (int y = 0; y < img->height; y++) {
