@@ -29,19 +29,28 @@ void save(Imagen* img, const char* filename) {
 
 //función para atenuar
 void operacion3(Imagen* imagen, float factor) {
-  if (factor < 0.0f) factor = 0.0f; //rango [0, 1]
+  if (factor < 0.0f) factor = 0.0f; // Rango [0, 1]
   if (factor > 1.0f) factor = 1.0f;
+
   for (int indice = 0; indice < imagen->width * imagen->height * imagen->channels; ++indice) {
-      float v_atenuado = imagen->data[indice] * factor;//atenuamos
-      imagen->data[indice] = static_cast<unsigned char>(v_atenuado);//+ 0.5f) // +0.5 para redondeo
+
+      int canal = indice % imagen->channels;//posicion del canal 
+      if (canal < 3) {//aplicamos a los canales RGB
+          float v_atenuado = imagen->data[indice] * factor;
+          imagen->data[indice] = static_cast<unsigned char>(v_atenuado + 0.5f);
+      }
   }
 }
 
 int main() {
   // cargamos la imagen
-  Imagen* pikachu = load("Pikachu4.png");
+  Imagen* pikachu = load("Pikachu.png");
 
-  operacion3(pikachu, 0.5f);// atenuamos la mitad
+  float valor;
+  cout << "Ingrese el valor de atenuación (0.0 a 1.0): ";
+  cin >> valor;
+
+  operacion3(pikachu, valor);
   save(pikachu, "Pikachu4.png");
   delete[] pikachu->data;// liberamos memoria
   delete pikachu;
