@@ -17,14 +17,14 @@ struct Imagen{
 // Abrir imagen desde memoria local
 Imagen* load(const char* filename) {
     Imagen* img = new Imagen();
-    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 0);
+    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 3);
+    img->channels = 3;
     return img;
 }
 
 //funcion para invertir horizontalmente la imagen
 void invertir(Imagen* imagen){
   int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 4 256 256 
-  cout<<canales<<endl;
   unsigned char* array_pixeles = imagen->data; // Pixeles por canales en un array (puntero hacia un array)
   for (int fila = 0; fila < alto ;++fila){ //itera por filas
     for (int clmIzq = 0; clmIzq < (ancho / 2) ; ++clmIzq){ //itera columnas de la mitad izquierda
