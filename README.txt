@@ -25,3 +25,4 @@ Bibiografía
   * Aroyuelo, D., & Díaz, R. (s.f.). Tutorial del Lenguaje C++. INF-134 Estructuras de Datos. Departamento de Informática, Universidad Técnica Federico Santa María.
   * STB Image Library (2023). Código fuente de stb_image.h.
   
+  
