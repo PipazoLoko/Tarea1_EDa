@@ -23,14 +23,14 @@ Imagen* load(const char* filename) {
     return img;
 }
 
-// Guardar imagen en disco
+// Guardar imagen en memoria local
 void save(Imagen* img, const char* filename) {
     stbi_write_png(filename, img->width, img->height, img->channels, img->data, img->width * img->channels);
     cout << "Imagen guardada: " << filename << endl;
 }
 
 
-//funcion para invertir horizontalmente la imagen
+//funcion para invertir la imagen
 void operacion1(Imagen* imagen){
   int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 4 256 256 
   cout<<canales<<endl;
@@ -51,18 +51,20 @@ void operacion1(Imagen* imagen){
 // Operación 2: Rotación 90° antihoraria
 Imagen* operacion2(Imagen* original) {
     Imagen* rotada = new Imagen();
-    rotada->width = original->height;
-    rotada->height = original->width;
-    rotada->channels = original->channels;
+    rotada->width = original->height;//alto sera ancho
+    rotada->height = original->width;//ancho sera alto
+    rotada->channels = original->channels;//mantendremos los canales
+
+    //asignar memoria
     rotada->data = new unsigned char[rotada->width * rotada->height * rotada->channels];
 
-    for (int h = 0; h < original->height; ++h) {
-        for (int w = 0; w < original->width; ++w) {
-            int pos_original = (h * original->width + w) * original->channels;
-            int pos_rotada = (w * rotada->width + (rotada->width - 1 - h)) * rotada->channels;
+    for (int h = 0; h < original->height; ++h) {//recorreremos cada fila hasta llegar a la altura
+        for (int w = 0; w < original->width; ++w) {//recorreremos cada columna hasta llegar al ancho
+            int pos_original = (h * original->width + w) * original->channels;//calculamos los indices exactos
+            int pos_rotada = (w * rotada->width + (rotada->width - 1 - h)) * rotada->channels;//calculamos indices ya rotados
 
             for (int c = 0; c < original->channels; ++c) {
-                rotada->data[pos_rotada + c] = original->data[pos_original + c];
+                rotada->data[pos_rotada + c] = original->data[pos_original + c];//copiamos canales
             }
         }
     }
@@ -80,35 +82,34 @@ void operacion3(Imagen* imagen, float factor) {
           float v_atenuado = imagen->data[indice] * factor;//atenuamos
         if (v_atenuado < 0) v_atenuado = 0;//valor en el rango [0, 255]
         if (v_atenuado > 255) v_atenuado = 255;
-          // Asignamos el nuevo valor al canal correspondiente  
-            imagen->data[indice] = static_cast<unsigned char>(v_atenuado + 0.5f);
+            imagen->data[indice] = static_cast<unsigned char>(v_atenuado + 0.5f);//asignamos el nuevo valor al canal correspondiente
         }
     }
 }
 
 
-// funcion para mdificar la imagen (blanco/negro)
+//funcion para mdificar la imagen (blanco/negro)
 void operacion4(Imagen* imagen, int limite) {
   // aseguramos el límite [0, 255]
   if (limite < 0) limite = 0;
   else if (limite > 255) limite = 255;
 
 
-  // procesamos cada píxel
+  //procesamos cada píxel
   for (int i = 0; i < imagen->width * imagen->height; ++i) {
       // calcular la posición base del píxel
       int indice_base = i * imagen->channels;
 
-      // Convertir a escala de grises si es necesario
+      //convertir a escala de grises si es necesario
       float valor_gris;
       if (imagen->channels >= 3) {  // RGB
-          valor_gris = 0.299f * imagen->data[indice_base] +   // R
-                       0.587f * imagen->data[indice_base + 1] + // G
-                       0.114f * imagen->data[indice_base + 2];  // B
-      } else {  // Escala de grises (1 o 2 canales)
+          valor_gris = 0.299f * imagen->data[indice_base] +   
+                       0.587f * imagen->data[indice_base + 1] + 
+                       0.114f * imagen->data[indice_base + 2];  
+      } else {  //escala de grises (1 o 2 canales)
           valor_gris = imagen->data[indice_base];
       }
-      unsigned char nuevo_valor; // Determinar nuevo valor (blanco o negro)
+      unsigned char nuevo_valor; //determinar nuevo valor (blanco o negro)
 
       if (valor_gris > limite) {
           nuevo_valor = 255;
@@ -122,23 +123,22 @@ void operacion4(Imagen* imagen, int limite) {
     }
 }
       int main() {
-        // --- Operación 1: invertir horizontalmente ---
+        //operación 1
         Imagen* img1 = load("Pikachu.png");
         operacion1(img1);
         save(img1, "Pikachu_invertido.png");
-        stbi_image_free(img1->data);  // correcto para stbi_load
-        delete img1;
+        stbi_image_free(img1->data);
     
-        // --- Operación 2: rotar 90 grados ---
+        //operacion 2
         Imagen* img2 = load("Pikachu.png");
         Imagen* rotada = operacion2(img2);
         save(rotada, "Pikachu_rotada.png");
-        stbi_image_free(img2->data);  // correcto
+        stbi_image_free(img2->data); 
         delete img2;
-        delete[] rotada->data;        // correcto porque usaste new[]
+        delete[] rotada->data; 
         delete rotada;
     
-        // --- Operación 3: atenuar imagen ---
+        //operación 3
         Imagen* img3 = load("Pikachu.png");
         float valor;
         cout << "Ingrese el valor de atenuación (0.0 a 1.0): ";
@@ -148,7 +148,7 @@ void operacion4(Imagen* imagen, int limite) {
         stbi_image_free(img3->data);
         delete img3;
     
-        // --- Operación 4: blanco y negro ---
+        //operación 4
         Imagen* img4 = load("Pikachu.png");
         int limite = 100;
         operacion4(img4, limite);
