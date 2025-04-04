@@ -48,9 +48,7 @@ void operacion4(Imagen* imagen, int limite) {
         } else {  // Escala de grises (1 o 2 canales)
             valor_gris = imagen->data[indice_base];
         }
-
-        // Determinar nuevo valor (blanco o negro)
-        unsigned char nuevo_valor; 
+        unsigned char nuevo_valor; // Determinar nuevo valor (blanco o negro)
 
         if (valor_gris > limite) {
             nuevo_valor = 255;
@@ -58,28 +56,20 @@ void operacion4(Imagen* imagen, int limite) {
             nuevo_valor = 0;   
         }
 
-        // Aplicar a todos los canales de color (excepto alpha si existe)
-        for (int c = 0; c < min(3, imagen->channels); ++c) {
+        for (int c = 0; c < min(3, imagen->channels); ++c) {//aplicar a RGB
             imagen->data[indice_base + c] = nuevo_valor;
         }
-
         }
     }
-
-
 int main() {
     // Cargar imagen
     Imagen* img = load("Pikachu5.png");
 
     // Umbralizar con límite de 128 (puedes cambiar este valor)
-    int limite_umbral = 100;
-    operacion4(img, limite_umbral);
-
-    // Guardar resultado
+    int limite = 100;
+    operacion4(img, limite);
     save(img, "Pikachu5.png");
-
-    // Liberar memoria
-    delete[] img->data;
+    delete[] img->data;// liberamos memoria
     delete img;
 
     return 0;
