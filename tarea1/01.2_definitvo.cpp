@@ -10,7 +10,7 @@ using namespace std;
 
 // Struct que almacena la data de una imagen
 struct Imagen{
-    unsigned char* data;
+    unsigned char* data; //Puntero a un array unidimensional tipo uchar (apunta a la direccion base) de pixeles * canales 
     int width, height, channels;
 };
 
@@ -24,11 +24,11 @@ Imagen* load(const char* filename) {
 
 //funcion para operacion_1 horizontalmente la imagen
 void operacion_1(Imagen* imagen){
-  int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 4 256 256 
+  int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 3 256 256 
   unsigned char* array_pixeles = imagen->data; // Pixeles por canales en un array (puntero hacia un array)
   for (int fila = 0; fila < alto ;++fila){ //itera por filas
     for (int clmIzq = 0; clmIzq < (ancho / 2) ; ++clmIzq){ //itera columnas de la mitad izquierda
-      int clmDer = ancho - 1 - clmIzq, indIzq = (ancho * fila + clmIzq) * canales , indDer = (ancho * fila + clmDer) * canales; // calcula columna derecha asociada a la izquierda; y "cordenadas" de los pixeles para ser utilizada en el array que almacena los canales de los pixeles
+      int clmDer = ancho - 1 - clmIzq, indIzq = (ancho * fila + clmIzq) * canales , indDer = (ancho * fila + clmDer) * canales; // calcula columna derecha asociada a la izquierda; e indices o "cordenadas" de los pixeles para ser utilizada en el array que almacena los canales de los pixeles
       //swap de canales por pixel
       for(int i = 0; i < canales; ++i){
         unsigned char temp = array_pixeles[indIzq + i];  //almacena temporalmente los valores de los canales del pixel izquierdo
