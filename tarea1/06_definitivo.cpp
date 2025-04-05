@@ -46,30 +46,25 @@ void operacion1(Imagen* imagen){
       }
     } 
   }
+  stbi_image_free(imagen->data); // función de la librería stb_image.h que libera memoria de la funcion stbi_load.
 }
 
-// Operación 2: Rotación 90° antihoraria
-Imagen* operacion2(Imagen* original) {
-    Imagen* rotada = new Imagen();
-    rotada->width = original->height;//alto sera ancho
-    rotada->height = original->width;//ancho sera alto
-    rotada->channels = original->channels;//mantendremos los canales
-
-    //asignar memoria
-    rotada->data = new unsigned char[rotada->width * rotada->height * rotada->channels];
-
-    for (int h = 0; h < original->height; ++h) {//recorreremos cada fila hasta llegar a la altura
-        for (int w = 0; w < original->width; ++w) {//recorreremos cada columna hasta llegar al ancho
-            int pos_original = (h * original->width + w) * original->channels;//calculamos los indices exactos
-            int pos_rotada = (w * rotada->width + (rotada->width - 1 - h)) * rotada->channels;//calculamos indices ya rotados
-
-            for (int c = 0; c < original->channels; ++c) {
-                rotada->data[pos_rotada + c] = original->data[pos_original + c];//copiamos canales
-            }
+//Funcion rotar 90 antihorario
+void operacion_2(Imagen* imagen){
+    int alto_original = imagen->height, ancho_original = imagen->width, canales = imagen->channels; //alto, ancho y canales de original
+    int alto_rotado = ancho_original, ancho_rotado = alto_original;
+    unsigned char* array_pixeles_rotados = new unsigned char[alto_rotado * ancho_rotado * canales]; // puntero al array de canales RGB por cantidad de pixeles totales, como es cuadrada son iguales
+    for (int fila = 0 ; fila < ancho_original; ++fila){
+        for(int columna = 0; columna < alto_original; ++columna){
+            int indice_original = (fila * ancho_original + columna) * canales; 
+            int indice_rotado = (columna * ancho_rotado + (ancho_rotado - 1 - fila)) * canales;
+        for(int i = 0; i < canales; ++i){ // copian los valores RGB al rotado que esta vacio 
+            array_pixeles_rotados[indice_rotado + i] = imagen->data[indice_original + i];
+        }
         }
     }
-
-    return rotada;
+    stbi_image_free(imagen->data);
+    imagen->data = array_pixeles_rotados; // asigna pixeles rotados al original
 }
 
 //función para atenuar
@@ -127,16 +122,16 @@ void operacion4(Imagen* imagen, int limite) {
         Imagen* img1 = load("Pikachu.png");
         operacion1(img1);
         save(img1, "Pikachu_invertido.png");
-        stbi_image_free(img1->data);
-    
+        delete[] img1->data; //libera contenido
+        delete img1; //elimina el objeto, la estructura
+
         //operacion 2
         Imagen* img2 = load("Pikachu.png");
-        Imagen* rotada = operacion2(img2);
-        save(rotada, "Pikachu_rotada.png");
-        stbi_image_free(img2->data); 
+        operacion_2(img2);
+        save(img2, "Pikachu_rotada.png");
         delete img2;
-        delete[] rotada->data; 
-        delete rotada;
+        delete[] img2->data; 
+        delete img2;
     
         //operación 3
         Imagen* img3 = load("Pikachu.png");
