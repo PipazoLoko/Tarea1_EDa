@@ -33,19 +33,19 @@ void save(Imagen* img, const char* filename) {
 //funcion para invertir la imagen
 void operacion1(Imagen* imagen){
   int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 4 256 256 
-  cout<<canales<<endl;
+cout<<canales<<endl;
   unsigned char* array_pixeles = imagen->data; // Pixeles por canales en un array (puntero hacia un array)
   for (int fila = 0; fila < alto ;++fila){ //itera por filas
     for (int clmIzq = 0; clmIzq < (ancho / 2) ; ++clmIzq){ //itera columnas de la mitad izquierda
       int clmDer = ancho - 1 - clmIzq, indIzq = (ancho * fila + clmIzq) * canales , indDer = (ancho * fila + clmDer) * canales; // calcula columna derecha asociada a la izquierda; "cordenadas" de los pixeles para ser utilizada en el array que almacena los canales de los pixeles
       //swap de canales por pixel
-      for(int i = 0; i < canales; ++i){
+    for(int i = 0; i < canales; ++i){
         unsigned char temp = array_pixeles[indIzq + i];  //almacena temporalmente los valores de los canales del pixel izquierdo
         array_pixeles[indIzq + i] = array_pixeles[indDer + i ]; //asigna valores de canales del pixel derecho al izq
         array_pixeles[indDer + i] = temp; // asigna valore de canales del pixel izq al derecho 
-      }
+    }
     } 
-  }
+}
 }
 
 // Operación 2: Rotación 90° antihoraria
