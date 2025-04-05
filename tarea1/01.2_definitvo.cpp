@@ -37,6 +37,7 @@ void operacion_1(Imagen* imagen){
       }
     } 
   }
+  stbi_image_free(imagen->data); // función de la librería stb_image.h que libera memoria de la funcion stbi_load.
 }
 
 // Guardar imagen en memoria local
@@ -50,6 +51,7 @@ int main() {
     Imagen* img = load("Pikachu2.png");
     operacion_1(img);
     save(img, "Pikachu2.png");// Almacenamos el resultado
-    stbi_image_free(img->data); // función de la librería stb_image.h que libera memoria de la funcion stbi_load. 
+    delete[] img->data; // función de la librería stb_image.h que libera memoria de la funcion stbi_load. 
     delete img; //elimina el objeto, la estructura o el "esqueleto", mientras que la anterior deletea su contenido fuente: https://solarianprogrammer.com/2019/06/10/c-programming-reading-writing-images-stb_image-libraries/
+    return 0;
 }

@@ -36,6 +36,7 @@ void operacion_2(Imagen* imagen){
         }
         }
     }
+    stbi_image_free(imagen->data);
     imagen->data = array_pixeles_rotados; // asigna pixeles rotados al original
 }
 
