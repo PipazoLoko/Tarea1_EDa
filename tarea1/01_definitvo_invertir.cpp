@@ -1,10 +1,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-// Importacion de librerias. Los archivos correspondientes deben estar en el mismo directorio que el .cpp.
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include <iostream>
+
 
 using namespace std;
 
