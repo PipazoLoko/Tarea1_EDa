@@ -43,7 +43,7 @@ int main() {
     Imagen* img = load("Pikachu.png");
     operacion3(img, (float)(0.5));
     // Almacenamos el resultado
-    save(img, "Pikachu_aten.png");
+    save(img, "Pikachu4.png");
     delete[] img->data;
     delete img;
 }
