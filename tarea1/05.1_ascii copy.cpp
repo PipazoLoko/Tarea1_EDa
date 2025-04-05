@@ -22,9 +22,9 @@ Imagen* load(const char* filename) {
 char** operacion7(const Imagen* img, const char ascii_chars[]) {
     // Número de caracteres en el arreglo
     const int num_chars = sizeof(ascii_chars) / sizeof(ascii_chars[0]);
-    char** ascii_art = new char*[img->height];//asignamos memeoria para las filas
+    char** ascii = new char*[img->height];//asignamos memeoria para las filas
     for (int h = 0; h < img->height; h++) { 
-        ascii_art[h] = new char[img->width + 1];//incluir caracter nulo
+        ascii[h] = new char[img->width + 1];//incluir caracter nulo
     }
     
     //recorremos la imagen para asignar un caracter ASCII
@@ -39,21 +39,19 @@ char** operacion7(const Imagen* img, const char ascii_chars[]) {
                 unsigned char b = img->data[pos + 2];
                 gris = 0.299f * r + 0.587f * g + 0.114f * b;
             } else {
-                //si la imagen ya esta en escala de grises
-                gris = img->data[pos];
+
+                gris = img->data[pos];//si la imagen ya esta en escala de grises
             }
-                    // Convertir a escala de grises si es necesario
-            // Mapear el valor de gris [0, 255] a uno de los caracteres del arreglo
             int  posdiv_caracter= (int)(gris * num_chars / 256); //indice del caracter 
             if ( posdiv_caracter >= num_chars)
             posdiv_caracter= num_chars - 1;
-            ascii_art[h][w] = ascii_chars[ posdiv_caracter];
+            ascii[h][w] = ascii_chars[ posdiv_caracter];
         }
-        // Finalizar cada línea con el carácter nulo
-        ascii_art[h][img->width] = '\0';
+
+        ascii[h][img->width] = '\0';//finalizamos con caracter nulo
     }
     
-    return ascii_art;
+    return ascii;
 }
 
 
@@ -71,18 +69,18 @@ int main() {
 
     const char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
 
-    char** ascii_art = operacion7(img, ascii_chars);//convertimos la imagen a ASCII
+    char** ascii = operacion7(img, ascii_chars);//convertimos la imagen a ASCII
     
     for (int h = 0; h < img->height; h++) {//imprimimos el resultado
-        cout << ascii_art[h] << "\n";
+        cout << ascii[h] << "\n";
     }
 
-    save_ascii(ascii_art, img->height, "Pikachuassci.txt");//lo guardamos en un archivo .txt
+    save_ascii(ascii, img->height, "Pikachuassci.txt");//lo guardamos en un archivo .txt
     
     for (int h = 0; h < img->height; h++) {//liberamos memoria de cada fila
-        delete[] ascii_art[h];
+        delete[] ascii[h];
     }
-    delete[] ascii_art;//liberamos memoria del arreglo
+    delete[] ascii;//liberamos memoria del arreglo
     
     
     stbi_image_free(img->data);//liberamos memoria de la imagen
