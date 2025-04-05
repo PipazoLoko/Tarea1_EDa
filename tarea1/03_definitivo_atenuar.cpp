@@ -26,9 +26,9 @@ Imagen* load(const char* filename) {
 void operacion3(Imagen* imagen, float valor){
     int alto = imagen->height, ancho = imagen->width, canales = imagen->channels;
     unsigned char* array_de_pixeles = imagen->data;
-    for(int indice = 0; indice < alto * ancho * canales; ++indice){
-        float v_atenuado = array_de_pixeles[indice] * valor;
-        imagen->data[indice] = (unsigned char)v_atenuado;
+    for(int indice = 0; indice < alto * ancho * canales; ++indice){ // itero los indices RGB por pixel
+        float v_atenuado = array_de_pixeles[indice] * valor; // aplicamos atenuacion
+        imagen->data[indice] = (unsigned char)v_atenuado; // cambiamos valores del original al atenuado
     }
 }
 

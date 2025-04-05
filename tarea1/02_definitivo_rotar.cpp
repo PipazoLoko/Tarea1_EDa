@@ -27,7 +27,7 @@ void operacion2(Imagen* imagen){
     int alto_original = imagen->height, ancho_original = imagen->width, canales = imagen->channels; //alto, ancho y canales de original
     int alto_rotado = ancho_original, ancho_rotado = alto_original;
     unsigned char* array_pixeles_rotados = new unsigned char[alto_rotado * ancho_rotado * canales]; // puntero al array de canales RGB por cantidad de pixeles totales, como es cuadrada son iguales
-    for (int fila = 0 ; fila < ancho_original; ++fila){
+    for (int fila = 0 ; fila < ancho_original; ++fila){ //iteramos fila y columna del original, para calcular el indice R del original y el rotado
         for(int columna = 0; columna < alto_original; ++columna){
             int indice_original = (fila * ancho_original + columna) * canales; 
             int indice_rotado = (columna * ancho_rotado + (ancho_rotado - 1 - fila)) * canales;
