@@ -201,7 +201,8 @@ void save_ascii(char** ascii_art, int height, const char* filename) {
         stbi_image_free(img4->data);
         delete img4;
 
-    const char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
+    //operación 5
+    char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
 
     Imagen* img5 = load("Pikachu.png"); // Cargar la imagen para la operación ASCII
     char** ascii = to_ascii(img5, ascii_chars);//convertimos la imagen a ASCII
