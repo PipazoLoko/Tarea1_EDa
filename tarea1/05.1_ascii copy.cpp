@@ -67,33 +67,26 @@ void save_ascii(char** ascii_art, int height, const char* filename) {
 
 int main() {
     Imagen* img = load("Pikachu.png");
-    if (!img->data)
-        return 1;
     
-    // Definir el arreglo de caracteres ASCII ordenados por luminosidad.
-    // Por ejemplo, de oscuro a claro: '#' y 'X' representan pixeles oscuros y '|' y ' ' los más luminosos.
-    const char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };
 
-    // Generar el ASCII Art
-    char** ascii_art = operacion7(img, ascii_chars);
+    const char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
+
+    char** ascii_art = operacion7(img, ascii_chars);//convertimos la imagen a ASCII
     
-    // Imprimir el resultado en consola
-    for (int h = 0; h < img->height; h++) {
+    for (int h = 0; h < img->height; h++) {//imprimimos el resultado
         cout << ascii_art[h] << "\n";
     }
+
+    save_ascii(ascii_art, img->height, "Pikachuassci.txt");//lo guardamos en un archivo .txt
     
-    // Guardar el ASCII Art en un archivo de texto
-    save_ascii(ascii_art, img->height, "Pikachuassci.txt");
-    
-    // Liberar la memoria reservada para el arreglo bidimensional
-    for (int h = 0; h < img->height; h++) {
+    for (int h = 0; h < img->height; h++) {//liberamos memoria de cada fila
         delete[] ascii_art[h];
     }
-    delete[] ascii_art;
+    delete[] ascii_art;//liberamos memoria del arreglo
     
     
-    stbi_image_free(img->data);
-    delete img;
+    stbi_image_free(img->data);//liberamos memoria de la imagen
+    delete img;//liberamos memoria de la estructura
     
     return 0;
 }
