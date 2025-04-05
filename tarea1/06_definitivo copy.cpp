@@ -33,8 +33,7 @@ void save(Imagen* img, const char* filename) {
 
 //funcion para invertir la imagen
 void operacion1(Imagen* imagen){
-  int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 4 256 256 
-  cout<<canales<<endl;
+  int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 3 256 256 
   unsigned char* array_pixeles = imagen->data; // Pixeles por canales en un array (puntero hacia un array)
   for (int fila = 0; fila < alto ;++fila){ //itera por filas
     for (int clmIzq = 0; clmIzq < (ancho / 2) ; ++clmIzq){ //itera columnas de la mitad izquierda
@@ -47,7 +46,7 @@ void operacion1(Imagen* imagen){
       }
     } 
   }
-//   stbi_image_free(imagen->data); // función de la librería stb_image.h que libera memoria de la funcion stbi_load.
+   stbi_image_free(imagen->data); // función de la librería stb_image.h que libera memoria de la funcion stbi_load.
 }
 
 //Funcion rotar 90 antihorario
@@ -59,7 +58,7 @@ void operacion_2(Imagen* imagen){
         for(int columna = 0; columna < alto_original; ++columna){
             int indice_original = (fila * ancho_original + columna) * canales; 
             int indice_rotado = (columna * ancho_rotado + (ancho_rotado - 1 - fila)) * canales;
-        for(int i = 0; i < canales; ++i){ // copian los valores RGB al rotado que esta vacio 
+        for(int i = 0; i < canales; ++i){ // copian los valores RGB rotados al array_rotado que esta vacio 
             array_pixeles_rotados[indice_rotado + i] = imagen->data[indice_original + i];
         }
         }
@@ -116,7 +115,7 @@ void operacion4(Imagen* imagen, int limite) {
           imagen->data[indice_base + c] = nuevo_valor;
       }
     }
-    stbi_image_free(imagen->data);
+    // stbi_image_free(imagen->data);
 }
       int main() {
         //operación 1
