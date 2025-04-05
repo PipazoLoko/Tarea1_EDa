@@ -16,46 +16,41 @@ struct Imagen {
 Imagen* load(const char* filename) {
     Imagen* img = new Imagen();
     img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 0);
-    if (!img->data) {
-        cerr << "Error al cargar la imagen: " << filename << "\n";
-    }
     return img;
 }
 
-char** to_ascii(const Imagen* img, const char ascii_chars[]) {
+char** operacion7(const Imagen* img, const char ascii_chars[]) {
     // Número de caracteres en el arreglo
     const int num_chars = sizeof(ascii_chars) / sizeof(ascii_chars[0]);
-    // Reservar memoria para las filas del ASCII Art
-    char** ascii_art = new char*[img->height];
-    for (int y = 0; y < img->height; y++) {
-        // Reservamos ancho + 1 para incluir el carácter nulo al final de cada líne
-        ascii_art[y] = new char[img->width + 1];
+    char** ascii_art = new char*[img->height];//asignamos memeoria para las filas
+    for (int h = 0; h < img->height; h++) { 
+        ascii_art[h] = new char[img->width + 1];//incluir caracter nulo
     }
     
-    // Recorrer la imagen y asignar un carácter ASCII a cada pixel
-    for (int y = 0; y < img->height; y++) {
-        for (int x = 0; x < img->width; x++) {
-            int pos = (y * img->width + x) * img->channels;
-            float gray;
+    //recorremos la imagen para asignar un caracter ASCII
+    for (int h = 0; h < img->height; h++) {
+        for (int w = 0; w < img->width; w++) {
+            int pos = (h * img->width + w) * img->channels;
+            float gris;
             if (img->channels >= 3) {
-                // Conversión a gris: 0.299 * R + 0.587 * G + 0.114 * B
+                //conversión a gris: 0.299 * R + 0.587 * G + 0.114 * B
                 unsigned char r = img->data[pos];
                 unsigned char g = img->data[pos + 1];
                 unsigned char b = img->data[pos + 2];
-                gray = 0.299f * r + 0.587f * g + 0.114f * b;
+                gris = 0.299f * r + 0.587f * g + 0.114f * b;
             } else {
-                // Si la imagen ya es en escala de grises
-                gray = img->data[pos];
+                //si la imagen ya esta en escala de grises
+                gris = img->data[pos];
             }
                     // Convertir a escala de grises si es necesario
             // Mapear el valor de gris [0, 255] a uno de los caracteres del arreglo
-            int  posdiv_caracter= (int)(gray * num_chars / 256); //indice del caracter 
+            int  posdiv_caracter= (int)(gris * num_chars / 256); //indice del caracter 
             if ( posdiv_caracter >= num_chars)
             posdiv_caracter= num_chars - 1;
-            ascii_art[y][x] = ascii_chars[ posdiv_caracter];
+            ascii_art[h][w] = ascii_chars[ posdiv_caracter];
         }
         // Finalizar cada línea con el carácter nulo
-        ascii_art[y][img->width] = '\0';
+        ascii_art[h][img->width] = '\0';
     }
     
     return ascii_art;
@@ -64,42 +59,35 @@ char** to_ascii(const Imagen* img, const char ascii_chars[]) {
 
 void save_ascii(char** ascii_art, int height, const char* filename) {
     FILE* file = fopen(filename, "w");
-    if (!file) {
-        cerr << "No se pudo abrir el archivo: " << filename << "\n";
-        return;
+
+    for (int h = 0; h < height; h++) {
+        fprintf(file, "%s\n", ascii_art[h]);
     }
-    for (int y = 0; y < height; y++) {
-        // Escribir cada línea seguida de un salto de línea
-        fprintf(file, "%s\n", ascii_art[y]);
-    }
-    fclose(file);
-    cout << "ASCII Art guardado en: " << filename << "\n";
 }
 
 int main() {
-    // Cargar la imagen (por ejemplo "Pikachu.png")
     Imagen* img = load("Pikachu.png");
     if (!img->data)
         return 1;
     
     // Definir el arreglo de caracteres ASCII ordenados por luminosidad.
     // Por ejemplo, de oscuro a claro: '#' y 'X' representan pixeles oscuros y '|' y ' ' los más luminosos.
-    const char ascii_chars[] = { '#', 'X', 'O', '=', '+', '|', '.', ' ' };
+    const char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };
 
     // Generar el ASCII Art
-    char** ascii_art = to_ascii(img, ascii_chars);
+    char** ascii_art = operacion7(img, ascii_chars);
     
     // Imprimir el resultado en consola
-    for (int y = 0; y < img->height; y++) {
-        cout << ascii_art[y] << "\n";
+    for (int h = 0; h < img->height; h++) {
+        cout << ascii_art[h] << "\n";
     }
     
     // Guardar el ASCII Art en un archivo de texto
     save_ascii(ascii_art, img->height, "Pikachuassci.txt");
     
     // Liberar la memoria reservada para el arreglo bidimensional
-    for (int y = 0; y < img->height; y++) {
-        delete[] ascii_art[y];
+    for (int h = 0; h < img->height; h++) {
+        delete[] ascii_art[h];
     }
     delete[] ascii_art;
     
