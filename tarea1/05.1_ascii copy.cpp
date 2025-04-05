@@ -19,7 +19,7 @@ Imagen* load(const char* filename) {
     return img;
 }
 
-char** operacion7(const Imagen* img, const char ascii_chars[]) {
+char** to_ascii(const Imagen* img, const char ascii_chars[]) {
     // Número de caracteres en el arreglo
     const int num_chars = sizeof(ascii_chars) / sizeof(ascii_chars[0]);
     char** ascii = new char*[img->height];//asignamos memeoria para las filas
@@ -69,7 +69,7 @@ int main() {
 
     const char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
 
-    char** ascii = operacion7(img, ascii_chars);//convertimos la imagen a ASCII
+    char** ascii = to_ascii(img, ascii_chars);//convertimos la imagen a ASCII
     
     for (int h = 0; h < img->height; h++) {//imprimimos el resultado
         cout << ascii[h] << "\n";
