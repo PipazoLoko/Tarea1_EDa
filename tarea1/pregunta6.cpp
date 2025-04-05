@@ -48,7 +48,7 @@ int main() {
     Imagen* img = load("Pikachu.png");
     operacion4(img, 80);
     // Almacenamos el resultado
-    save(img, "Pikachu512.png");
+    save(img, "Pikachu_error_bn.png");
     delete[] img->data;
     delete img;
 }
