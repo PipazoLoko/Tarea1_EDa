@@ -28,7 +28,7 @@ void operacion_1(Imagen* imagen){
   unsigned char* array_pixeles = imagen->data; // Pixeles por canales en un array (puntero hacia un array)
   for (int fila = 0; fila < alto ;++fila){ //itera por filas
     for (int clmIzq = 0; clmIzq < (ancho / 2) ; ++clmIzq){ //itera columnas de la mitad izquierda
-      int clmDer = ancho - 1 - clmIzq, indIzq = (ancho * fila + clmIzq) * canales , indDer = (ancho * fila + clmDer) * canales; // calcula columna derecha asociada a la izquierda; e indices o "cordenadas" de los pixeles para ser utilizada en el array que almacena los canales de los pixeles
+      int clmDer = ancho - 1 - clmIzq, indIzq = (ancho * fila + clmIzq) * canales , indDer = (ancho * fila + clmDer) * canales; // calcula columna derecha asociada a la izquierda; e indices o "cordenadas" de los R (de 3 en 3) de cada pixel para ser utilizada en el array que almacena los canales de los pixeles
       //swap de canales por pixel
       for(int i = 0; i < canales; ++i){
         unsigned char temp = array_pixeles[indIzq + i];  //almacena temporalmente los valores de los canales del pixel izquierdo
