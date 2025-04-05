@@ -1,0 +1,9 @@
+logica funcion atenuear void(Imagen* imagen, float valor):
+
+  (1) itero los indices de cada RGB de cada pixel (alto*ancho*canales)
+      (1.1) aplicar atenuacion a cada RGB de cada pixel
+      (1.2) cambio valores de data 
+
+obs: 
+- como la atenuacion es arbitraria no requiere cin
+- 0.5f = (float)(0.5) // casteo 

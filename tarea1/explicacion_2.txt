@@ -1,0 +1,22 @@
+Logica funcion rotar 90 antihorario:(void) idea es que sea consistente con la 1 definitiva
+
+  (1) crea un estructura vacia tipo imagen con data, channels, width...
+  (2) asigna el alto del original al ancho del nuevo
+  (3) asigna el ancho del original al alto del nuevo
+  (4) asigna los canales del original al nuevo
+  (5) asigna tamaño total de canales por pixel a data del nuevo
+  
+  (6) iteramos el alto (y = filas)
+      (6.1) iteramos ancho del original  (x = columnas)
+          (6.11) calculamos indice del original = (filas * ancho + columna) * canales) ->coordenadas(x,y)
+          (6.12) calculamos indice del rotado = (columnas * alto + (alto-1-fila))*canales ->coordenadas(y,-x)
+
+          (7)intercambiamos los canales. swap. reutilizo el ocupado en 1.definitivo
+  
+  (8)retorna estrucutura creada en 1 (nueva)
+
+obs:
+- funcion debe ser void, por lo tanto no retorna nada. eliminar 8
+- (1) no debe crear una imagen nueva sino sobreescribirla. 
+- (2)(3)(4)(5) crearlas en variables. como el 01.2_definitivo	
+- (6.11)(6.12) se pueden colocar en una sola linea 
