@@ -53,6 +53,7 @@ void operacion2(Imagen* imagen){
         }
         }
     }
+    delete[] imagen->data;
     imagen->data = array_pixeles_rotados; // asigna pixeles rotados al original
 }
 
@@ -97,28 +98,24 @@ void save(Imagen* img, const char* filename) {
         Imagen* img1 = load("Pikachu.png");
         operacion1(img1);
         save(img1, "Pikachu_invertido.png");
-        delete[] img1->data; //libera contenido
         delete img1; //elimina el objeto, la estructura
 
         //operacion 2
         Imagen* img2 = load("Pikachu.png");
         operacion2(img2);
         save(img2, "Pikachu_rotada.png");
-        delete[] img2->data;
         delete img2;
          
         //operación 3
         Imagen* img3 = load("Pikachu.png");
         operacion3(img3, (float)(0.5));
         save(img3, "Pikachu_atenuado.png");
-        delete[] img3->data;
         delete img3;
     
         //operación 4
         Imagen* img4 = load("Pikachu.png");
         operacion4(img4, 400);
         save(img4, "Pikachu_bn.png");
-        delete[] img4->data;
         delete img4;
     }
     
