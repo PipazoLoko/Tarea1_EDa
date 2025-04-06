@@ -21,9 +21,7 @@ Pregunta 4 (5 pts)
   Al abrir y sobrescribir o escribir la imagen, hay que limitar los canales. En detalle, si cargamos una imagen de 4 canales, al abrirlo con la funcion stbi_load tenemos que modificar el ultimo parametro, indica los canales deseados, a 1 (escala de grises). Luego, al guardar la imagen con stbi_write_png reemplazamos todas sentencias llamadas img->channels por 1. 
 
 Pregunta 6 (10 pts)
-La siguiente implementacion de la Operacion 4 produce un resultado incorrecto. ¿Cual
-es el error, y como podrıa resolverse a nivel de codigo? La respuesta puede justificarse
-teoricamente o con codigo.
+La siguiente implementacion de la Operacion 4 produce un resultado incorrecto. ¿Cual es el error, y como podrıa resolverse a nivel de codigo? La respuesta puede justificarse teoricamente o con codigo.
 
   En vez de evaluar el pixel completo con sus 3 canales en conjunto y asignarles 255 o 0, segun arriba o debajo del limite. Se evalua cada canal del pixel de manera aislada, revisando si este esta por debajo o encima del limite, para despues asignarle el 255 o 0. Ejemplo: si rgb(155, 81, 0) y limite = 80, entonces  rgb(255, 255, 0).
 
