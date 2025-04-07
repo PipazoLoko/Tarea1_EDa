@@ -1,0 +1,13 @@
+Logica funcion b arriba del limite, n de lo contrario.
+
+  (1) iteramos cada pixel 'p' (sin canal o *3)
+      (1.1) calculamos el R de cada pixel 'p'
+      (1.2) calculamos el valor del pixel 'p' = suma de sus valores RGB. util para el array unidimensional
+      (1.3) creamos una variable para el nuevo valor
+
+      (2) condicional
+	  (2.1)	si es mayor al limite se asigna al nuevo valor el valor de blanvo
+          (2.2) si menor, se asigna negro
+      
+      (3) itera canales de pixel 'p'
+          (3.1) se asigna blanco o negro al RGB del pixel p

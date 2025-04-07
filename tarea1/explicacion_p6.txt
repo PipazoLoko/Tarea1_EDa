@@ -1,0 +1,7 @@
+rgb(40, 40, 40) pasa a rgb(0, 0, 0)
+rgb(22, 17, 3) pasa a rgb(0, 0, 0)
+rgb(230, 89, 65) pasa a rgb(255, 255, 255)
+rgb(247, 230, 81) pasa a rgb(255, 255, 255)
+rgb(155, 81, 0) pasa a rgb(255, 255, 0)
+rgb(247, 188, 32) pasa a rgb(255, 255, 0)
+rgb(255, 247, 164) pasa a rgb(255, 255, 255)
