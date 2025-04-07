@@ -1,0 +1,173 @@
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
+#include "stb_image.h"
+#include "stb_image_write.h"
+#include <iostream>
+#include <fstream>
+
+
+
+using namespace std;
+
+// Struct que almacena la data de una imagen
+struct Imagen {
+    unsigned char* data;
+    int width, height, channels;
+};
+
+// Cargar imagen desde disco
+Imagen* load(const char* filename) {
+    Imagen* img = new Imagen();
+    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 3);
+    img->channels = 3;
+    return img;
+}
+
+// Abrir imagen desde memoria local EN COLOR **GRIS**
+Imagen* load2(const char* filename) {
+    Imagen* img = new Imagen();
+    img->data = stbi_load(filename, &img->width, &img->height, &img->channels, 1);
+    img->channels = 1;
+    return img;
+}
+
+//funcion para operacion1 horizontalmente la imagen
+void operacion1(Imagen* imagen){
+    int canales = imagen->channels, alto = imagen->height, ancho = imagen->width; // Valores: 3 256 256 
+    unsigned char* array_pixeles = imagen->data; // Pixeles por canales en un array (puntero hacia un array)
+    for (int fila = 0; fila < alto ;++fila){ //itera por filas
+      for (int clmIzq = 0; clmIzq < (ancho / 2) ; ++clmIzq){ //itera columnas de la mitad izquierda
+        int clmDer = ancho - 1 - clmIzq, indIzq = (ancho * fila + clmIzq) * canales , indDer = (ancho * fila + clmDer) * canales; // calcula columna derecha asociada a la izquierda; e indices o "cordenadas" de los R (de 3 en 3) de cada pixel para ser utilizada en el array que almacena los canales de los pixeles
+        //swap de canales por pixel
+        for(int i = 0; i < canales; ++i){
+          unsigned char temp = array_pixeles[indIzq + i];  //almacena temporalmente los valores de los canales del pixel izquierdo
+          array_pixeles[indIzq + i] = array_pixeles[indDer + i ]; //asigna valores de canales del pixel derecho al izq
+          array_pixeles[indDer + i] = temp; // asigna valore de canales del pixel izq al derecho 
+        }
+      } 
+    }
+  }
+
+//Funcion rotar 90 antihorario
+void operacion2(Imagen* imagen){
+    int alto_original = imagen->height, ancho_original = imagen->width, canales = imagen->channels; //alto, ancho y canales de original
+    int alto_rotado = ancho_original, ancho_rotado = alto_original;
+    unsigned char* array_pixeles_rotados = new unsigned char[alto_rotado * ancho_rotado * canales]; // puntero al array de canales RGB por cantidad de pixeles totales, como es cuadrada son iguales
+    for (int fila = 0 ; fila < ancho_original; ++fila){ //iteramos fila y columna del original, para calcular el indice R del original y el rotado
+        for(int columna = 0; columna < alto_original; ++columna){
+            int indice_original = (fila * ancho_original + columna) * canales; 
+            int indice_rotado = (columna * ancho_rotado + (ancho_rotado - 1 - fila)) * canales;
+        for(int i = 0; i < canales; ++i){ // copian los valores RGB al rotado que esta vacio 
+            array_pixeles_rotados[indice_rotado + i] = imagen->data[indice_original + i];
+        }
+        }
+    }
+    delete[] imagen->data;
+    imagen->data = array_pixeles_rotados; // asigna pixeles rotados al original
+}
+
+// Funcion para atenuar la imagen con valor arbitrario
+void operacion3(Imagen* imagen, float valor){
+    int alto = imagen->height, ancho = imagen->width, canales = imagen->channels;
+    unsigned char* array_de_pixeles = imagen->data;
+    for(int indice = 0; indice < alto * ancho * canales; ++indice){ // itero los indices RGB por pixel
+        float v_atenuado = array_de_pixeles[indice] * valor; // aplicamos atenuacion
+        imagen->data[indice] = (unsigned char)v_atenuado; // cambiamos valores del original al atenuado
+    }
+}
+
+
+//Funcion para asignar blanco arriba del limite, negro de lo contrario
+void operacion4(Imagen* imagen, int limite){
+    int alto = imagen->height, ancho = imagen->width, canales = imagen->channels;
+    unsigned char* array_de_pixeles = imagen->data; 
+    for(int p = 0; p < alto * ancho; ++p){ // iteramos cada pixel 'p' (sin canal o *3)
+        int indiceR = p * canales; //calculamos el R de cada pixel 'p'
+        int suma_RGB = array_de_pixeles[indiceR] + array_de_pixeles[indiceR + 1] + array_de_pixeles[indiceR + 2]; // calculamos el valor del pixel 'p' = suma de sus valores RGB. util para el array unidimensional
+        unsigned char valor_blanco_negro; // creamos una variable que pude tomar valor de negro o blanco
+        if (suma_RGB > limite){ //asigna segun arriba o no arriba del limite
+            valor_blanco_negro = 255; //blanco
+        }else{
+            valor_blanco_negro = 0; //negro
+        }
+        for(int c = 0 ; c < canales; ++c){ //itero canales por pixel 'p' y le asigno el blanco o negro calculado previamente
+            array_de_pixeles[indiceR + c] = valor_blanco_negro ;
+        }
+    }
+}
+
+//funcion que crea un arreglo bidimensional a partir de la imagen y un arreglo 
+char** to_ascii(Imagen* imagen, char* arbitrario){
+    int alto = imagen-> height, ancho = imagen->width;
+    unsigned char* array_pixeles = imagen->data;
+    char** arreglo_bidi = new char*[alto]; // arreglo de punteros por fila
+    for (int i = 0; i < alto; i++) {     // cada arreglo de fila tiene un tamaño 'ancho' caracteres + 1 para el '\0'
+        arreglo_bidi[i] = new char[ancho + 1]; // +1 para terminar la cadena con '\0'
+    }
+    for(int fila = 0; fila < alto; ++fila){
+        for(int columna = 0; columna < ancho; ++columna){
+            int indice_pixel = fila * ancho + columna;
+            unsigned char contenido_pixel = array_pixeles[indice_pixel];
+            int index = contenido_pixel / 32; // del 0 al 7
+            arreglo_bidi[fila][columna] = arbitrario[index];
+                arreglo_bidi[fila][ancho] = '\0';
+            }
+        }
+        return arreglo_bidi;
+}
+
+// Funcion que crea un txt a partir del arreglo bidimensional
+void save_ascii(char** matriz_cuadrada){
+    ofstream salida;
+    salida.open("salida.txt");
+    for(int i = 0; i < 256; ++i){
+        salida << matriz_cuadrada[i] << endl;
+    }
+    salida.close();
+}
+
+// Guardar imagen en memoria local
+void save(Imagen* img, const char* filename) {
+    stbi_write_png(filename, img->width, img->height, img->channels, img->data, img->width * img->channels);
+    cout << "Imagen guardada: " << filename << endl;
+}
+
+int main() {
+    //operación 1
+    Imagen* img1 = load("Pikachu.png");
+    operacion1(img1);
+    save(img1, "Pikachu_invertido.png");
+    delete img1; //elimina el objeto, la estructura
+
+    //operacion 2
+    Imagen* img2 = load("Pikachu.png");
+    operacion2(img2);
+    save(img2, "Pikachu_rotada.png");
+    delete img2;
+        
+    //operación 3
+    Imagen* img3 = load("Pikachu.png");
+    operacion3(img3, (float)(0.5));
+    save(img3, "Pikachu_atenuado.png");
+    delete img3;
+
+    //operación 4
+    Imagen* img4 = load("Pikachu.png");
+    operacion4(img4, 400);
+    save(img4, "Pikachu_bn.png");
+    delete img4;
+    
+    //art ascii
+    //cargamos la imagen gris
+    Imagen* img5 = load2("Pikachu.png");
+    char array_arbitrario[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' }; //elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
+    char** arreglo_bidimensional = to_ascii(img5, array_arbitrario);
+    save_ascii(arreglo_bidimensional);
+    for (int i = 0; i < img5->height; ++i) {// liberar la memoria de arreglo bidimensional
+        delete[] arreglo_bidimensional[i]; // liberar cada fila
+    } 
+    delete[] arreglo_bidimensional; // liberar el arreglo de punteros
+    delete img5;
+}
+    

@@ -1,0 +1,33 @@
+Pregunta 1 (5 pts)
+¿Por qué si los pixeles de la imagen son números enteros ∈ [0, 255], utilizamos el tipo de dato unsigned char?
+
+  El tipo char es un tipo especial de entero que almacena 1 byte (8 bits), significa que reserva una memoria de 8 digitos binarios (2^8 = 256 valores) para representar un entero, que al ser unsigned solo tomara valores no negativos, siendo el intervalo [0-255], el cual coincide con los valores posibles de un pixel.  Arroyuelo, D., & Díaz, R. (s.f.). Apunte_Cplusplus.pdf (p. 4-5). Departamento de Informática, Universidad Técnica Federico Santa María.
+
+Pregunta 2 (5 pts)
+Cuales serían las diferencias entre usar unsigned int versus unsigned char? Responder cuantitativamente para una imagen RGB de dimensiones (N,N,3).
+
+  En este caso al ser una imagen RGB, el ocupar unsigned int seria un desperdicio de memoria, donde la suma de pixeles con int seria 4 veces mas lento (32 bits) en cambio char es mas rapido ya que contiene menos datos (8 bits), en este caso al ser una imagen sencilla nos conviene ocupar unsigned char. Arroyuelo, D., & Díaz, R. (s.f.). Apunte_Cplusplus.pdf (p. 4-5). Departamento de Informática, Universidad Técnica Federico Santa María.
+
+
+
+Pregunta 3 (5 pts)
+Usando este esquema de almacenamiento unidimensional: ¿Cuál sería el índice del primer pixel del canal azul?
+
+  En este arreglo una imagen RGB(RED,GREEN,BLUE), los canales de cada pixel se organizan como [R0,G0,B0,R1...Bn], donde R0=0, G0=1, B0=2 donde el indice del primer pixel azul es en este caso 2. STB Image Library (2023). Código fuente de stb_image.h.
+
+Pregunta 4 (5 pts)
+¿Cómo podemos convertir una imagen RGB a escala de grises?
+
+  Al abrir y sobrescribir o escribir la imagen, hay que limitar los canales. En detalle, si cargamos una imagen de 4 canales, al abrirlo con la funcion stbi_load tenemos que modificar el ultimo parametro, indica los canales deseados, a 1 (escala de grises). Luego, al guardar la imagen con stbi_write_png reemplazamos todas sentencias llamadas img->channels por 1. STB Image Library (2023). El codigo lo dejamos en gris.cpp. Código fuente de stb_image.h
+
+Pregunta 6 (10 pts)
+La siguiente implementacion de la Operacion 4 produce un resultado incorrecto. ¿Cual es el error, y como podrıa resolverse a nivel de codigo? La respuesta puede justificarse teoricamente o con codigo.
+
+  En vez de evaluar el pixel completo con sus 3 canales en conjunto y asignarles 255 o 0, segun arriba o debajo del limite. Se evalua cada canal del pixel de manera aislada, revisando si este esta por debajo o encima del limite, para despues asignarle el 255 o 0. Ejemplo: si rgb(155, 81, 0) y limite = 80, entonces  rgb(255, 255, 0).
+
+Bibiografía
+
+  * Aroyuelo, D., & Díaz, R. (s.f.). Tutorial del Lenguaje C++. INF-134 Estructuras de Datos. Departamento de Informática, Universidad Técnica Federico Santa María.
+  * STB Image Library (2023). Código fuente de stb_image.h.
+  
+  
