@@ -176,22 +176,16 @@ int main() {
 
     //operación 5
     char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
-
     Imagen* img5 = load("Pikachu.png"); // Cargar la imagen para la operación ASCII
     char** ascii = to_ascii(img5, ascii_chars);//convertimos la imagen a ASCII
-    
     for (int h = 0; h < img5->height; h++) {//imprimimos el resultado
         cout << ascii[h] << "\n";
     }
-
     save_ascii(ascii, img5->height, "Pikachuassci.txt");//lo guardamos en un archivo .txt
-    
     for (int h = 0; h < img5->height; h++) {//liberamos memoria de cada fila
         delete[] ascii[h];
     }
     delete[] ascii;//liberamos memoria del arreglo
-    
-    
     stbi_image_free(img5->data);//liberamos memoria de la imagen
     delete img5;//liberamos memoria de la estructura
     
