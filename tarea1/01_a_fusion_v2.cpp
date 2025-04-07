@@ -97,51 +97,35 @@ void operacion4(Imagen* imagen, int limite){
     }
 }
 
-//operacion ASCII
-char** to_ascii(const Imagen* img, const char ascii_chars[]) {
-    // Número de caracteres en el arreglo
-    const int num_chars = sizeof(ascii_chars) / sizeof(ascii_chars[0]);
-    char** ascii = new char*[img->height];//asignamos memeoria para las filas
-    for (int h = 0; h < img->height; h++) { 
-        ascii[h] = new char[img->width + 1];//incluir caracter nulo
+//funcion que crea un arreglo bidimensional a partir de la imagen y un arreglo 
+char** to_ascii(Imagen* imagen, char* arbitrario){
+    int alto = imagen-> height, ancho = imagen->width;
+    unsigned char* array_pixeles = imagen->data;
+    char** arreglo_bidi = new char*[alto]; // arreglo de punteros por fila
+    for (int i = 0; i < alto; i++) {     // cada arreglo de fila tiene un tamaño 'ancho' caracteres + 1 para el '\0'
+        arreglo_bidi[i] = new char[ancho + 1]; // +1 para terminar la cadena con '\0'
     }
-    
-    //recorremos la imagen para asignar un caracter ASCII
-    for (int h = 0; h < img->height; h++) {
-        for (int w = 0; w < img->width; w++) {
-            int pos = (h * img->width + w) * img->channels;
-            float gris;
-            if (img->channels >= 3) {
-                //conversión a gris: 0.299 * R + 0.587 * G + 0.114 * B
-                unsigned char r = img->data[pos];
-                unsigned char g = img->data[pos + 1];
-                unsigned char b = img->data[pos + 2];
-                gris = 0.299f * r + 0.587f * g + 0.114f * b;
-            } else {
-
-                gris = img->data[pos];//si la imagen ya esta en escala de grises
+    for(int fila = 0; fila < alto; ++fila){
+        for(int columna = 0; columna < ancho; ++columna){
+            int indice_pixel = fila * ancho + columna;
+            unsigned char contenido_pixel = array_pixeles[indice_pixel];
+            int index = contenido_pixel / 32; // del 0 al 7
+            arreglo_bidi[fila][columna] = arbitrario[index];
+                arreglo_bidi[fila][ancho] = '\0';
             }
-            int  posdiv_caracter= (int)(gris * num_chars / 256); //indice del caracter 
-            if ( posdiv_caracter >= num_chars)
-            posdiv_caracter= num_chars - 1;
-            ascii[h][w] = ascii_chars[ posdiv_caracter];
         }
-
-        ascii[h][img->width] = '\0';//finalizamos con caracter nulo
-    }
-    
-    return ascii;
+        return arreglo_bidi;
 }
 
-
-void save_ascii(char** ascii_art, int height, const char* filename) {
-    FILE* file = fopen(filename, "w");
-
-    for (int h = 0; h < height; h++) {
-        fprintf(file, "%s\n", ascii_art[h]);
+// Funcion que crea un txt a partir del arreglo bidimensional
+void save_ascii(char** matriz_cuadrada){
+    ofstream salida;
+    salida.open("salida.txt");
+    for(int i = 0; i < 256; ++i){
+        salida << matriz_cuadrada[i] << endl;
     }
+    salida.close();
 }
-
 
 // Guardar imagen en memoria local
 void save(Imagen* img, const char* filename) {
@@ -173,21 +157,17 @@ int main() {
     operacion4(img4, 400);
     save(img4, "Pikachu_bn.png");
     delete img4;
-
-    //operación 5
-    char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
-    Imagen* img5 = load("Pikachu.png"); // Cargar la imagen para la operación ASCII
-    char** ascii = to_ascii(img5, ascii_chars);//convertimos la imagen a ASCII
-    for (int h = 0; h < img5->height; h++) {//imprimimos el resultado
-        cout << ascii[h] << "\n";
-    }
-    save_ascii(ascii, img5->height, "Pikachuassci.txt");//lo guardamos en un archivo .txt
-    for (int h = 0; h < img5->height; h++) {//liberamos memoria de cada fila
-        delete[] ascii[h];
-    }
-    delete[] ascii;//liberamos memoria del arreglo
-    stbi_image_free(img5->data);//liberamos memoria de la imagen
-    delete img5;//liberamos memoria de la estructura
     
-        return 0;
-    }
+    //art ascii
+    //cargamos la imagen gris
+    Imagen* img5 = load2("Pikachu.png");
+    char array_arbitrario[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' }; //elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
+    char** arreglo_bidimensional = to_ascii(img5, array_arbitrario);
+    save_ascii(arreglo_bidimensional);
+    for (int i = 0; i < img5->height; ++i) {// liberar la memoria de arreglo bidimensional
+        delete[] arreglo_bidimensional[i]; // liberar cada fila
+    } 
+    delete[] arreglo_bidimensional; // liberar el arreglo de punteros
+    delete img5;
+}
+    

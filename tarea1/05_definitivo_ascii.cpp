@@ -76,5 +76,4 @@ int main() {
     delete[] arreglo_bidimensional; // liberar el arreglo de punteros
     // stbi_image_free(img5->data);  // Libera la data cargada por stbi_load
     delete img5;
-
 }
