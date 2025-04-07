@@ -18,7 +18,7 @@ Usando este esquema de almacenamiento unidimensional: ¿Cuál sería el índice 
 Pregunta 4 (5 pts)
 ¿Cómo podemos convertir una imagen RGB a escala de grises?
 
-  Al abrir y sobrescribir o escribir la imagen, hay que limitar los canales. En detalle, si cargamos una imagen de 4 canales, al abrirlo con la funcion stbi_load tenemos que modificar el ultimo parametro, indica los canales deseados, a 1 (escala de grises). Luego, al guardar la imagen con stbi_write_png reemplazamos todas sentencias llamadas img->channels por 1. STB Image Library (2023). Código fuente de stb_image.h
+  Al abrir y sobrescribir o escribir la imagen, hay que limitar los canales. En detalle, si cargamos una imagen de 4 canales, al abrirlo con la funcion stbi_load tenemos que modificar el ultimo parametro, indica los canales deseados, a 1 (escala de grises). Luego, al guardar la imagen con stbi_write_png reemplazamos todas sentencias llamadas img->channels por 1. STB Image Library (2023). El codigo lo dejamos en gris.cpp. Código fuente de stb_image.h
 
 Pregunta 6 (10 pts)
 La siguiente implementacion de la Operacion 4 produce un resultado incorrecto. ¿Cual es el error, y como podrıa resolverse a nivel de codigo? La respuesta puede justificarse teoricamente o con codigo.
