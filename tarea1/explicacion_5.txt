@@ -1,0 +1,26 @@
+Logica funcion to_ascii:
+
+(0)toma una imagen y un arreglo de caracteres ASCII, devuelve un array 2D de chars
+    (1)Cuenta cuantos caracteres hay en ascii_chars dividiendolo en el tamaño total
+    (1.1)reserva memeoria para un arreglo de filas
+    (2)A cada fila se le reserva memoeria y un espacio para el caracter nulo
+
+    (3)Recorremos cada pixel de forma fila x columna
+    (4)Calcula la posicion del arreglo en una dimension 
+        (5)Convertimos de RGB a gris
+    (6)Determina el carcter a usar basandose en el valor de gris  
+    (6.1)Asigna el caracter ASCII
+    (6.2)Añade un elemento nulo al final de cada string  
+
+Logica funcion save_ascii:
+
+(0)guardamos en un archivo
+    (1)Abrimos el archivo en escritura
+    (2)Escribe el archivo de modo linea-salto de linea
+    (2.1)Cierra el archivo
+
+
+
+
+
+
