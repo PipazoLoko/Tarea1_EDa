@@ -86,6 +86,50 @@ void operacion4(Imagen* imagen, int limite){
     }
 }
 
+//Funcion para convertir imagen en ASCII
+char** to_ascii(const Imagen* img, const char ascii_chars[]) {
+    // Número de caracteres en el arreglo
+    const int num_chars = sizeof(ascii_chars) / sizeof(ascii_chars[0]);
+    char** ascii = new char*[img->height];//asignamos memeoria para las filas
+    for (int h = 0; h < img->height; h++) { 
+        ascii[h] = new char[img->width + 1];//incluir caracter nulo
+    }
+    
+    //recorremos la imagen para asignar un caracter ASCII
+    for (int h = 0; h < img->height; h++) {
+        for (int w = 0; w < img->width; w++) {
+            int pos = (h * img->width + w) * img->channels;
+            float gris;
+            if (img->channels >= 3) {
+                //conversión a gris: 0.299 * R + 0.587 * G + 0.114 * B
+                unsigned char r = img->data[pos];
+                unsigned char g = img->data[pos + 1];
+                unsigned char b = img->data[pos + 2];
+                gris = 0.299f * r + 0.587f * g + 0.114f * b;
+            } else {
+
+                gris = img->data[pos];//si la imagen ya esta en escala de grises
+            }
+            int  posdiv_caracter= (int)(gris * num_chars / 256); //indice del caracter 
+            if ( posdiv_caracter >= num_chars)
+            posdiv_caracter= num_chars - 1;
+            ascii[h][w] = ascii_chars[ posdiv_caracter];
+        }
+
+        ascii[h][img->width] = '\0';//finalizamos con caracter nulo
+    }
+    
+    return ascii;
+}
+
+
+void save_ascii(char** ascii_art, int height, const char* filename) {
+    FILE* file = fopen(filename, "w");
+
+    for (int h = 0; h < height; h++) {
+        fprintf(file, "%s\n", ascii_art[h]);
+    }
+}
 // Guardar imagen en memoria local
 void save(Imagen* img, const char* filename) {
     stbi_write_png(filename, img->width, img->height, img->channels, img->data, img->width * img->channels);
@@ -120,5 +164,27 @@ void save(Imagen* img, const char* filename) {
         save(img4, "Pikachu_bn.png");
         delete[] img4->data;
         delete img4;
+        //operación 5
+    char ascii_chars[] = { '@', 'X', '&', '=', '*', '|', '.', ' ' };//elegimos el arreglo de caracteres ASCII y lo ordemanos de mas oscuro a claro
+
+    Imagen* img5 = load("Pikachu.png"); // Cargar la imagen para la operación ASCII
+    char** ascii = to_ascii(img5, ascii_chars);//convertimos la imagen a ASCII
+    
+    for (int h = 0; h < img5->height; h++) {//imprimimos el resultado
+        cout << ascii[h] << "\n";
+    }
+
+    save_ascii(ascii, img5->height, "Pikachuassci.txt");//lo guardamos en un archivo .txt
+    
+    for (int h = 0; h < img5->height; h++) {//liberamos memoria de cada fila
+        delete[] ascii[h];
+    }
+    delete[] ascii;//liberamos memoria del arreglo
+    
+    
+    stbi_image_free(img5->data);//liberamos memoria de la imagen
+    delete img5;//liberamos memoria de la estructura
+    
+        return 0;
     }
     
