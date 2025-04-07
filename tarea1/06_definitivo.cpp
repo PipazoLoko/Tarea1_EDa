@@ -225,3 +225,4 @@ void save_ascii(char** ascii_art, int height, const char* filename) {
         return 0;
     }
     
+    
